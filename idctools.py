@@ -1023,15 +1023,16 @@ class ip_block:
             for a in Curr_devList:
                 Currsql_res = c.execute("SELECT * FROM devices WHERE ID='{0}'".format(a))
                 Currsql_res_List = list(Currsql_res)
+                print(Currsql_res_List)
                 self.CurrBlockDev_Info.append(Currsql_res_List)
                 if  'HUAWEI' in  Currsql_res_List[0][3] or 'huawei' in  Currsql_res_List[0][3] or '华为' in  Currsql_res_List[0][3]:
                     if self.setHuawei():
-                        pass
+                        print(ColorLogDecorator().green('【INFO】封堵完成！请自行Ping测是否有效', 'strong'))
                         # self.exportToFile()
                         # print(ColorLogDecorator.green('【INFO】已导出配置记录表和封堵脚本至程序运行目录下', 'strong'))
                 elif 'H3C' in Currsql_res_List[0][3] or '华三' in  Currsql_res_List[0][3]:
                     if self.setH3C():
-                        pass
+                        print(ColorLogDecorator().green('【INFO】封堵完成！请自行Ping测是否有效', 'strong'))
                         # self.exportToFile()
                 elif 'RUIJIE'in Currsql_res_List[0][3] or '锐捷' in  Currsql_res_List[0][3]:
                     if self.setRuijie():
@@ -1054,12 +1055,12 @@ class ip_block:
             Currsql_res_List = list(Currsql_res)
             if 'HUAWEI' in Currsql_res_List[0][3] or 'huawei' in Currsql_res_List[0][3] or '华为' in Currsql_res_List[0][3]:
                 if self.setHuawei():
-                    pass
+                    print(ColorLogDecorator().green('【INFO】封堵完成！请自行Ping测是否有效', 'strong'))
                     # self.exportToFile()
                     # print(ColorLogDecorator.green('【INFO】已导出配置记录表和封堵脚本至程序运行目录下', 'strong'))
             elif 'H3C' in Currsql_res_List[0][3] or '华三' in Currsql_res_List[0][3]:
                 if self.setH3C():
-                    pass
+                    print(ColorLogDecorator().green('【INFO】封堵完成！请自行Ping测是否有效', 'strong'))
                     #self.exportToFile()
             elif 'RUIJIE' in Currsql_res_List[0][3] or '锐捷' in Currsql_res_List[0][3]:
                 if self.setRuijie():
@@ -1089,7 +1090,7 @@ class ip_block:
             # 创建ssh对象
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(hostname=self.CurrBlockDev_Info[2], port=22, username=config['account']['username'], password=config['account']['password'])
+            ssh.connect(hostname=self.CurrBlockDev_Info[i][0][2], port=22, username=config['account']['username'], password=config['account']['password'])
             # 执行命令
             command = ssh.invoke_shell()  # 激活Terminal
             time.sleep(3)
@@ -1101,10 +1102,10 @@ class ip_block:
             command.send("return\n")
             command.send("save\n")
             command.send("Y\n")
-            time.sleep(1)
+            time.sleep(3)
             # command.recv(65535) #这里可接收结果写入日志
             ssh.close()
-        print(ColorLogDecorator().green('【INFO】封堵完成！请自行Ping测是否有效', 'strong'))
+
         return True
 
 
@@ -1120,7 +1121,7 @@ class ip_block:
             # 创建ssh对象
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(hostname=self.CurrBlockDev_Info[2], port=22, username=config['account']['username'],password=config['account']['password'])
+            ssh.connect(hostname=self.CurrBlockDev_Info[i][0][2], port=22, username=config['account']['username'],password=config['account']['password'])
             # 执行命令
             command = ssh.invoke_shell()  # 激活Terminal
             time.sleep(3)
@@ -1154,7 +1155,7 @@ class ip_block:
                                 [选择]  >>要封堵的机房<<
                 ''')
                 for i in range(len(self.jifang_list)):
-                    print('     {0}. {1}'.format(i+1, self.jifang_list))
+                    print('     {0}. {1}'.format(i+1, self.jifang_list[i]))
 
                 print('\n    (tips: 返回上一级菜单请输入q或quit)')
                 print('===============================================\n')
