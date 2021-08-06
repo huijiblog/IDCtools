@@ -10,7 +10,6 @@ from configobj import ConfigObj
 import pypinyin
 import openpyxl
 from openpyxl.styles import Font, Alignment
-import ctypes, sys
 
 #菜单
 def handleMenu():
@@ -419,7 +418,7 @@ def manageLocalDB():
                             if wantDelInput.upper() == 'Y':
                                 ###  删除设备时，如果是关联的封堵设备，也会一同从封堵设备列表中删除
                                 if os.path.isfile('blockconfig.ini'):
-                                    config = ConfigObj('blockconfig.ini', encoding='UTF8')
+                                    config = ConfigObj('blockconfig.ini', encoding='UTF-8')
                                     cfgDict = config['devList']
                                     for key, values in cfgDict.items():
                                         if delNumInput + ',' in values:
@@ -500,7 +499,7 @@ def manageLocalDB():
                     if manaBlockInput == "1":
                         os.system('cls')
                         if os.path.isfile('blockconfig.ini'):
-                            config = ConfigObj('blockconfig.ini', encoding='UTF8')
+                            config = ConfigObj('blockconfig.ini', encoding='UTF-8')
                             if config['list']['jifang'] == '':
                                 print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
                                 print("                                  【封堵设备列表】")
@@ -651,7 +650,7 @@ def manageLocalDB():
                         deldevs = input(" 请输入要删除的设备id(多个设备用英文逗号分隔;留空或输入q则直接退出)：")
                         if "," in deldevs and deldevs != "":
                             afterCutLst = deldevs.split(",")
-                            config = ConfigObj('blockconfig.ini', encoding='UTF8')
+                            config = ConfigObj('blockconfig.ini', encoding='UTF-8')
                             cfgDict = config['devList']
                             for afterCutValue in afterCutLst:
                                 for key,values in cfgDict.items():
@@ -687,7 +686,7 @@ def manageLocalDB():
                             continue
 
                         elif deldevs.isdigit() == True:
-                            config = ConfigObj('blockconfig.ini', encoding='UTF8')
+                            config = ConfigObj('blockconfig.ini', encoding='UTF-8')
                             cfgDict = config['devList']
                             for key, values in cfgDict.items():
                                 if deldevs + ',' in values:
@@ -728,7 +727,7 @@ def manageLocalDB():
 
                     elif manaBlockInput == "4":
                         os.system('cls')
-                        config = ConfigObj('blockconfig.ini', encoding='UTF8')
+                        config = ConfigObj('blockconfig.ini', encoding='UTF-8')
                         print("============================")
                         print("  【通用设备登录账号管理】")
                         print(" 账号：{0}".format(config['account']['username']))
@@ -772,7 +771,7 @@ class devConfig_export:
         c = conn.cursor()
         sqlRes = c.execute("SELECT * FROM devices")
         if os.path.isfile('blockconfig.ini'):
-            config = ConfigObj('blockconfig.ini', encoding='UTF8')
+            config = ConfigObj('blockconfig.ini', encoding='UTF-8')
             conf_un = config['account']['username']
             conf_pw = config['account']['password']
             if conf_un == '' or conf_pw == '':
@@ -817,7 +816,7 @@ class devConfig_export:
             data = []
             while True:
                 out = command.recv(65535)
-                res = out.decode('utf-8')
+                res = out.decode(encoding='UTF-8')
                 data.append(res)
                 if 'return' in res:
                     break
@@ -852,7 +851,7 @@ class devConfig_export:
             data = []
             while True:
                 out = command.recv(65535)
-                res = out.decode('utf-8')
+                res = out.decode(encoding='UTF-8')
                 data.append(res)
                 if 'return' in res:
                     break
@@ -888,7 +887,7 @@ class devConfig_export:
             data = []
             while True:
                 out = command.recv(65535)
-                res = out.decode('utf-8')
+                res = out.decode(encoding='UTF-8')
                 data.append(res)
                 if '!</static>' in res:
                     break
@@ -924,7 +923,7 @@ class devConfig_export:
             data = []
             while True:
                 out = command.recv(65535)
-                res = out.decode('utf-8')
+                res = out.decode(encoding='UTF-8')
                 data.append(res)
                 if "!end" in res or "Host" in res:
                     break
@@ -960,7 +959,7 @@ class devConfig_export:
             data = []
             while True:
                 out = command.recv(65535)
-                res = out.decode('utf-8')
+                res = out.decode(encoding='UTF-8')
                 data.append(res)
                 if "!end" in res or "Host" in res:
                     break
@@ -995,7 +994,7 @@ class ip_block:
     # 读取和初始化封堵设备信息
     def Init_jifang_list(self):
         if os.path.isfile('blockconfig.ini'):
-            config = ConfigObj('blockconfig.ini', encoding='UTF8')
+            config = ConfigObj('blockconfig.ini', encoding='UTF-8')
             if config['list']['jifang'] == '':
                 return False
             else:
@@ -1013,7 +1012,7 @@ class ip_block:
         s = ''
         for single_word in pypinyin.pinyin(self.jifang_select, style=pypinyin.NORMAL):
             s += ''.join(single_word)
-        config = ConfigObj('blockconfig.ini', encoding='UTF8')
+        config = ConfigObj('blockconfig.ini', encoding='UTF-8')
         ipblock_Devices = config['devList'][s]
         if ',' in ipblock_Devices:
             Curr_devList = ipblock_Devices.split(',')
@@ -1082,7 +1081,7 @@ class ip_block:
         pass
 
     def setHuawei(self):
-        config = ConfigObj('blockconfig.ini', encoding='UTF8')
+        config = ConfigObj('blockconfig.ini', encoding='UTF-8')
         if config['account']['username'] == '' or config['account']['password'] == '':
             print(ColorLogDecorator().red('【ERROR】设备通用SSH账号密码未设置，请设置后再使用本功能！', 'strong'))
             return False
@@ -1113,7 +1112,7 @@ class ip_block:
         pass
 
     def setH3C(self):
-        config = ConfigObj('blockconfig.ini', encoding='UTF8')
+        config = ConfigObj('blockconfig.ini', encoding='UTF-8')
         if config['account']['username'] == '' or config['account']['password'] == '':
             print(ColorLogDecorator().red('【ERROR】设备通用SSH账号密码未设置，请设置后再使用本功能！', 'strong'))
             return False
